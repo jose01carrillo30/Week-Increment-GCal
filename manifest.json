@@ -1,7 +1,7 @@
 {
-  "name": "Google Calendar Contiuous Month Scroll",
+  "name": "Google Calendar Continuous Month View",
   "version": "0.0",
-  "description": "Week-increment custom view for Google Calendar.",
+  "description": "Shortcut to week-increment the custom view for Google Calendar.",
   "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "input"],
   "options_page": "options.html",
   "background": {

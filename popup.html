@@ -2,15 +2,33 @@
 <html>
   <head>
     <style>
+      body {
+        margin: 0%;
+      }
       button {
-        height: 30px;
-        width: 30px;
+        height: fit-content;
+        width: fit-content;
+        padding: 1rem;
+        margin: 0.5rem;
         outline: none;
+      }
+      .banner {
+        background-color: #2C51C3; 
+        color: aliceblue;
+        padding: 0.1rem;
+        font-style: italic;
+        text-align: center;
+        margin: 0%;
       }
     </style>
   </head>
   <body>
-    <button id="changeColor"></button>
+    <div>
+      <h2 class="banner" style="font-size: smaller;">
+        Continuous Month View for Google Calendar
+      </h2>
+    </div>
+    <button id="btn-settings">Settings</button>
     <script src="popup.js"></script>
   </body>
 </html>
