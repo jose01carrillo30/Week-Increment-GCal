@@ -1,16 +1,27 @@
 'use strict';
+var enabled;
 
-let changeColor = document.getElementById('changeColor');
+let bkg = chrome.extension.getBackgroundPage();
+let btnEnable = document.getElementById('btn-enable');
 
-chrome.storage.sync.get('color', function(data) {
-  changeColor.style.backgroundColor = data.color;
-  changeColor.setAttribute('value', data.color);
+btnEnable.onclick = function(element) {
+  chrome.storage.sync.set({enabled: !enabled}, function() {
+    console.log('toggled enabled!');  
+    updateEnabled(!enabled);
+  })
+};
+
+chrome.storage.sync.get('enabled', function(data) {
+  bkg.console.log('btnEnabled: ' + data.enabled);
+  updateEnabled(data.enabled);
 });
 
-changeColor.onclick = function(element) {
-  let color = element.target.value;
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    var bkg = chrome.extension.getBackgroundPage();
-    bkg.console.log('foo');
-  });
-};
+function updateEnabled(nowEnabled) {
+  btnEnable.innerHTML = nowEnabled ? "Disable" : "Enable";
+  enabled = nowEnabled;
+  let listItems = document.getElementsByClassName("enableable");
+  for (let listItem of listItems) {
+    bkg.console.log("li: "+listItem);
+    listItem.disabled = !enabled;
+  }
+}

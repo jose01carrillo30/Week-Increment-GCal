@@ -1,8 +1,12 @@
 'use strict';
 
+const defaultSettings = {
+  enabled: true
+};
+
 chrome.runtime.onInstalled.addListener(function() {
-  chrome.storage.sync.set({color: '#000000'}, function() {
-    console.log('Pop-up button clicked.');
+  chrome.storage.sync.set(defaultSettings, function() {
+    console.log('Installed, storage.sync set.');
   });
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([{
