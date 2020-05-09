@@ -9,8 +9,17 @@
         height: fit-content;
         width: fit-content;
         padding: 1rem;
-        margin: 0.5rem;
         outline: none;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem;
+      }
+      .split {
+        border-bottom: solid 1px lightslategray;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
       }
       .banner {
         background-color: #2C51C3; 
@@ -28,7 +37,23 @@
         Continuous Month View for Google Calendar
       </h2>
     </div>
-    <button id="btn-settings">Settings</button>
+    <ul>
+      <li>
+        <button id="btn-settings">Settings</button><br>
+      </li>
+      <li>
+        <input type="checkbox" id="check-assume-view" name="check-assume-view"> 
+        <label for="check-assume-view"> Assume custom view is default</label><br>
+      </li>
+      <li class="split">
+        <input type="checkbox" id="check-assume-view" name="check-assume-view"> 
+        <label for="check-assume-view"> Assume custom view is default</label><br>
+      </li>
+      <li>
+        <input type="checkbox" id="check-assume-view" name="check-assume-view"> 
+        <label for="check-assume-view"> Assume custom view is default</label><br>
+      </li>
+    </ul>
     <script src="popup.js"></script>
   </body>
 </html>
