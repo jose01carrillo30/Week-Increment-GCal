@@ -21,8 +21,11 @@ chrome.commands.onCommand.addListener(function(command) {
       var bkg = chrome.extension.getBackgroundPage();
 
       var tabUrl = tabs[0].url;
-      if (!tabUrl.includes("customweek")) {
-        bkg.console.log("Please select custom week!");
+
+      // check to make sure we are on a calendar
+      if (tabUrl.includes("trash") || 
+          tabUrl.includes("settings") || 
+          tabUrl.includes("eventedit")) {
         return;
       }
   
@@ -33,6 +36,7 @@ chrome.commands.onCommand.addListener(function(command) {
       var currDate;
       if (urlPieces.length > 3) {
         urlDate.isValid = true;
+        // check the last 3 pieces to see if they are a date, and store them if so
         for (var i = 0; i < 3; i++) {
           bkg.console.log("urlpice: " + urlPieces[urlPieces.length - 1 - i]);
           urlDate[i] = parseInt(urlPieces[urlPieces.length - 1 - i], 10);
@@ -48,9 +52,11 @@ chrome.commands.onCommand.addListener(function(command) {
       } else {
         currDate = new Date(urlDate[2], urlDate[1]-1, urlDate[0]);
       }
-  
-      var tabTitle = encodeURIComponent(tabs[0].title);
-  
+
+      // ----------- get the root of the URL ----------- //
+      var matchedRoot = tabUrl.match(/.*\/r/)[0];
+      bkg.console.log("got root " + matchedRoot);
+      
       // ----------- Update URL ----------- //
       // increment date one week
       if (command == "down-week") {
@@ -60,10 +66,10 @@ chrome.commands.onCommand.addListener(function(command) {
       }
   
       // set target URL with updated date
-      tabUrl = "https://calendar.google.com/calendar/r/customweek/" //FIXME: get this dynamically
+      tabUrl = matchedRoot + "/customweek/"
           + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
   
-      bkg.console.log('taburl: ' + tabUrl + "   tab title: " + tabTitle);
+      bkg.console.log('taburl: ' + tabUrl);
   
       chrome.tabs.update({url: tabUrl});
     });
