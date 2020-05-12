@@ -16,12 +16,13 @@ chrome.storage.sync.get('enabled', function(data) {
   updateEnabled(data.enabled);
 });
 
-function updateEnabled(nowEnabled) {
-  btnEnable.innerHTML = nowEnabled ? "Disable" : "Enable";
-  enabled = nowEnabled;
-  let listItems = document.getElementsByClassName("enableable");
-  for (let listItem of listItems) {
-    bkg.console.log("li: "+listItem);
-    listItem.disabled = !enabled;
-  }
-}
+// function updateEnabled(nowEnabled) {
+//   btnEnable.innerHTML = nowEnabled ? "Disable" : "Enable";
+//   enabled = nowEnabled;
+//   let listItems = document.getElementsByClassName("enableable");
+//   for (let listItem of listItems) {
+//     bkg.console.log("li: "+listItem);
+//     // listItem.disabled = !enabled
+//     listItem.style.display = enabled ? "block" : "none";
+//   }
+// }
