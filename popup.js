@@ -7,13 +7,21 @@ let btnEnable = document.getElementById('btn-enable');
 btnEnable.onclick = function(element) {
   chrome.storage.sync.set({enabled: !enabled}, function() {
     console.log('toggled enabled!');  
-    updateEnabled(!enabled);
+    // updateEnabled(!enabled);
   })
 };
 
 chrome.storage.sync.get('enabled', function(data) {
   bkg.console.log('btnEnabled: ' + data.enabled);
-  updateEnabled(data.enabled);
+  // updateEnabled(data.enabled);
+});
+
+chrome.cookies.getAll({}, function(cookies) {
+  bkg.console.log("got " + cookies.length + " cookies!");
+  
+  for (let cookie of cookies) { 
+    bkg.console.log(cookie);
+  }
 });
 
 // function updateEnabled(nowEnabled) {

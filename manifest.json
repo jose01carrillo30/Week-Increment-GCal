@@ -2,7 +2,7 @@
   "name": "Google Calendar Continuous Month View",
   "version": "0.0",
   "description": "Shortcut to week-increment the custom view for Google Calendar.",
-  "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "input"],
+  "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "input", "cookies","*://calendar.google.com/"],
   "options_page": "options.html",
   "background": {
     "scripts": ["background.js"],
