@@ -38,7 +38,6 @@ chrome.commands.onCommand.addListener(function(command) {
         urlDate.isValid = true;
         // check the last 3 pieces to see if they are a date, and store them if so
         for (var i = 0; i < 3; i++) {
-          bkg.console.log("urlpice: " + urlPieces[urlPieces.length - 1 - i]);
           urlDate[i] = parseInt(urlPieces[urlPieces.length - 1 - i], 10);
           if (isNaN(urlDate[i])) {
             urlDate.isValid = false;
@@ -47,7 +46,6 @@ chrome.commands.onCommand.addListener(function(command) {
         }
       }
       if (!urlDate.isValid) {
-        bkg.console.log("dateless url found");
         currDate = new Date();
       } else {
         currDate = new Date(urlDate[2], urlDate[1]-1, urlDate[0]);
@@ -55,7 +53,6 @@ chrome.commands.onCommand.addListener(function(command) {
 
       // ----------- get the root of the URL ----------- //
       var matchedRoot = tabUrl.match(/.*\/r/)[0];
-      bkg.console.log("got root " + matchedRoot);
       
       // ----------- Update URL ----------- //
       // increment date one week
@@ -68,8 +65,6 @@ chrome.commands.onCommand.addListener(function(command) {
       // set target URL with updated date
       tabUrl = matchedRoot + "/customweek/"
           + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
-  
-      bkg.console.log('taburl: ' + tabUrl);
   
       chrome.tabs.update({url: tabUrl});
     });
