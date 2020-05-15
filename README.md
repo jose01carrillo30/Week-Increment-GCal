@@ -1,9 +1,9 @@
 # Week Increment for Google Calendar Custom View
 Adds shortcuts to increment the custom week view for Google Calendar one week at a time.
 
-## How do I use it?
-Currently, it is pending in the Chrome Web Store. A link to download it will be added here when it is ready!
+### [Click here to get it from the Chrome Web Store.](https://chrome.google.com/webstore/detail/week-increment-google-cal/mpdpfnabohjiinfoagikghmlnpnjmihg)
 
+## How do I use it?
 Press `Ctrl`+`↓` or `Ctrl`+`↑` (where ↓/↑ are arrow keys) to move your view of the calendar 'down' or 'up' one week respectively. 
 
 For this extension to work properly, you must set your Google Calendar's custom view to 2, 3, or 4 weeks (4 recommended).
