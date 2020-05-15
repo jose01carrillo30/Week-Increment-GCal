@@ -10,7 +10,7 @@ For this extension to work properly, you must set your Google Calendar's custom 
 
 This app works by modifying the URL of your tab. As such, the page is refreshed every time you increment by a week. Be aware that this means any unsaved changes to an event will be lost when you increment your view.
 
-You can change your shortcuts for this extension by going to chrome://extensions/shortcuts
+You can change your shortcuts for this extension by going to chrome://extensions/shortcuts in your browser.
 
 ## Why do I want to use it?
 Google Calendar lacks continuous scrolling for month view, making it difficult to work with events that cross between months. This extension aims to address this difficulty by allowing users to increment their view a week at a time in a multi-week view. 
