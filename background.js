@@ -11,6 +11,7 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
+// Listener for increment key command
 chrome.commands.onCommand.addListener(function(command) {
   if (command == "down-week" || command == "up-week") {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -23,7 +24,7 @@ chrome.commands.onCommand.addListener(function(command) {
           tabUrl.includes("eventedit")) {
         return;
       }
-  
+
       // ----------- get the currently selected date 'currDate' ----------- //
       var urlPieces = tabUrl.split("/");
       var urlDate = [];
@@ -50,18 +51,31 @@ chrome.commands.onCommand.addListener(function(command) {
       var matchedRoot = tabUrl.match(/.*\/r/)[0];
       
       // ----------- Update URL ----------- //
-      // increment date one week
-      if (command == "down-week") {
-        currDate.setDate(currDate.getDate() + 7);
-      } else {
-        currDate.setDate(currDate.getDate() - 7);
-      }
-  
-      // set target URL with updated date
-      tabUrl = matchedRoot + "/customweek/"
-          + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
-  
-      chrome.tabs.update({url: tabUrl});
+      chrome.storage.sync.get("dayOrWeek", ({ dayOrWeek }) => {
+        console.log(dayOrWeek ? "day mode" : "week mode");
+        console.log(dayOrWeek);
+        // increment date one week
+        if (command == "down-week") {
+          currDate.setDate(currDate.getDate() + (dayOrWeek? 1 : 7));
+        } else {
+          currDate.setDate(currDate.getDate() - (dayOrWeek? 1 : 7));
+        }
+    
+        // set target URL with updated date
+        tabUrl = matchedRoot + (dayOrWeek? "/customday/" : "/customweek/")
+            + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
+    
+        chrome.tabs.update({url: tabUrl});
+      });
     });
+  }
+});
+
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+  for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+    console.log(
+      `Storage key "${key}" in namespace "${namespace}" changed.`,
+      `Old value was "${oldValue}", new value is "${newValue}".`
+    );
   }
 });
