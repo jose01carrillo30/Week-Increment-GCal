@@ -14,7 +14,6 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.commands.onCommand.addListener(function(command) {
   if (command == "down-week" || command == "up-week") {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      var bkg = chrome.extension.getBackgroundPage();
 
       var tabUrl = tabs[0].url;
 
