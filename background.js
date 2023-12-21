@@ -13,7 +13,8 @@ chrome.runtime.onInstalled.addListener(function() {
 
 // Listener for increment key command
 chrome.commands.onCommand.addListener(function(command) {
-  if (command == "down-week" || command == "up-week") {
+  if (command == "02-down-week" || command == "01-up-week"
+  || command == "03-left-day" || command == "04-right-day") {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
       var tabUrl = tabs[0].url;
@@ -51,31 +52,25 @@ chrome.commands.onCommand.addListener(function(command) {
       var matchedRoot = tabUrl.match(/.*\/r/)[0];
       
       // ----------- Update URL ----------- //
-      chrome.storage.sync.get("dayOrWeek", ({ dayOrWeek }) => {
-        console.log(dayOrWeek ? "day mode" : "week mode");
-        console.log(dayOrWeek);
-        // increment date one week
-        if (command == "down-week") {
-          currDate.setDate(currDate.getDate() + (dayOrWeek? 1 : 7));
-        } else {
-          currDate.setDate(currDate.getDate() - (dayOrWeek? 1 : 7));
-        }
-    
-        // set target URL with updated date
-        tabUrl = matchedRoot + (dayOrWeek? "/customday/" : "/customweek/")
-            + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
-    
-        chrome.tabs.update({url: tabUrl});
-      });
+      // Assume which view we are in based on which button user presses
+      var isDayView = true;
+      // increment date
+      if (command == "02-down-week") {
+        currDate.setDate(currDate.getDate() + 7);
+        isDayView = false;
+      } else if (command == "01-up-week") {
+        currDate.setDate(currDate.getDate() - 7);
+        isDayView = false;
+      } else if (command == "04-right-day") {
+        currDate.setDate(currDate.getDate() + 1);
+      } else {
+        currDate.setDate(currDate.getDate() - 1);
+      }
+      // set target URL with updated date
+      tabUrl = matchedRoot + (isDayView? "/customday/" : "/customweek/")
+          + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
+  
+      chrome.tabs.update({url: tabUrl});
     });
-  }
-});
-
-chrome.storage.onChanged.addListener(function (changes, namespace) {
-  for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
-    console.log(
-      `Storage key "${key}" in namespace "${namespace}" changed.`,
-      `Old value was "${oldValue}", new value is "${newValue}".`
-    );
   }
 });
