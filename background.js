@@ -1,16 +1,5 @@
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {hostEquals: 'calendar.google.com'},
-      })],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
-  });
-});
-
 // Listener for increment key command
 chrome.commands.onCommand.addListener(function(command) {
   if (command == "02-down-week" || command == "01-up-week"
@@ -19,7 +8,13 @@ chrome.commands.onCommand.addListener(function(command) {
 
       var tabUrl = tabs[0].url;
 
-      // check to make sure we are on a calendar
+      // check we are on Google Calendar
+      var hostname = (new URL(tabUrl)).hostname;
+      if (hostname != "calendar.google.com") {
+        return;
+      }
+
+      // check to make sure we are viewing the calendar
       if (tabUrl.includes("trash") || 
           tabUrl.includes("settings") || 
           tabUrl.includes("eventedit")) {
