@@ -120,58 +120,31 @@ chrome.commands.onCommand.addListener(function(command) {
         return;
       }
 
-      let pathInfo = parseCalPath(urlObj.pathname);
-      console.log(pathInfo);
-      urlObj.pathname = makeCustomCalPath(pathInfo);
-      console.log("as string, ", urlObj.toString());
-      chrome.tabs.update({url: urlObj.toString()});
-      return
+      let viewData = parseCalPath(urlObj.pathname);
+      console.log(viewData);
 
-      // ----------- get the currently selected date 'currDate' ----------- //
-      var urlPieces = tabUrl.split("/");
-      var urlDate = [];
-      urlDate.isValid = false;
-      var currDate;
-      if (urlPieces.length > 3) {
-        urlDate.isValid = true;
-        // check the last 3 pieces to see if they are a date, and store them if so
-        for (var i = 0; i < 3; i++) {
-          urlDate[i] = parseInt(urlPieces[urlPieces.length - 1 - i], 10);
-          if (isNaN(urlDate[i])) {
-            urlDate.isValid = false;
-            break;
-          }
-        }
-      }
-      if (!urlDate.isValid) {
-        currDate = new Date();
-      } else {
-        currDate = new Date(urlDate[2], urlDate[1]-1, urlDate[0]);
-      }
-
-      // ----------- get the root of the URL ----------- //
-      var matchedRoot = tabUrl.match(/.*\/r/)[0];
-      
       // ----------- Update URL ----------- //
-      // Assume which view we are in based on which button user presses
-      var isDayView = true;
+      // Do nothing if this isn't valid path to act on
+      if (viewData == null) {
+        return;
+      }
+      // TODO: for unknown view, just assume it's 4 week view for now.
+      if (viewData.unit == null) {
+        Object.assign(viewData, {unit:'week', count:4});
+      }
       // increment date
       if (command == "02-down-week") {
-        currDate.setDate(currDate.getDate() + 7);
-        isDayView = false;
+        viewData.date.setDate(viewData.date.getDate() + 7);
       } else if (command == "01-up-week") {
-        currDate.setDate(currDate.getDate() - 7);
-        isDayView = false;
+        viewData.date.setDate(viewData.date.getDate() - 7);
       } else if (command == "04-right-day") {
-        currDate.setDate(currDate.getDate() + 1);
+        viewData.date.setDate(viewData.date.getDate() + 1);
       } else {
-        currDate.setDate(currDate.getDate() - 1);
+        viewData.date.setDate(viewData.date.getDate() - 1);
       }
       // set target URL with updated date
-      tabUrl = matchedRoot + (isDayView? "/customday/" : "/customweek/")
-          + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
-  
-      chrome.tabs.update({url: tabUrl});
+      urlObj.pathname = makeCustomCalPath(viewData);
+      chrome.tabs.update({url: urlObj.toString()});
     });
   }
 });
