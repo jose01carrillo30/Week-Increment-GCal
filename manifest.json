@@ -20,14 +20,6 @@
     "02-down-week": {
       "suggested_key": { "default": "Ctrl+Down" },
       "description": "Go forward one week in X-weeks custom view"
-    },
-    "03-left-day": {
-      "suggested_key": { "default": "Ctrl+Comma" },
-      "description": "Go backward one day in X-days custom view"
-    },
-    "04-right-day": {
-      "suggested_key": { "default": "Ctrl+Period" },
-      "description": "Go forward one day in X-days custom view"
     }
   },
   "manifest_version": 3

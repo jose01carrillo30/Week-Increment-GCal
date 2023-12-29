@@ -2,8 +2,7 @@
 
 // Listener for increment key command
 chrome.commands.onCommand.addListener(function(command) {
-  if (command == "02-down-week" || command == "01-up-week"
-  || command == "03-left-day" || command == "04-right-day") {
+  if (command == "02-down-week" || command == "01-up-week") {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
       var tabUrl = tabs[0].url;
@@ -47,22 +46,14 @@ chrome.commands.onCommand.addListener(function(command) {
       var matchedRoot = tabUrl.match(/.*\/r/)[0];
       
       // ----------- Update URL ----------- //
-      // Assume which view we are in based on which button user presses
-      var isDayView = true;
       // increment date
       if (command == "02-down-week") {
         currDate.setDate(currDate.getDate() + 7);
-        isDayView = false;
-      } else if (command == "01-up-week") {
-        currDate.setDate(currDate.getDate() - 7);
-        isDayView = false;
-      } else if (command == "04-right-day") {
-        currDate.setDate(currDate.getDate() + 1);
       } else {
-        currDate.setDate(currDate.getDate() - 1);
+        currDate.setDate(currDate.getDate() - 7);
       }
       // set target URL with updated date
-      tabUrl = matchedRoot + (isDayView? "/customday/" : "/customweek/")
+      tabUrl = matchedRoot + "/customweek/"
           + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
   
       chrome.tabs.update({url: tabUrl});
