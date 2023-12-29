@@ -1,30 +1,25 @@
 'use strict';
 
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([{
-      conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {hostEquals: 'calendar.google.com'},
-      })],
-      actions: [new chrome.declarativeContent.ShowPageAction()]
-    }]);
-  });
-});
-
+// Listener for increment key command
 chrome.commands.onCommand.addListener(function(command) {
-  if (command == "down-week" || command == "up-week") {
+  if (command == "02-down-week" || command == "01-up-week") {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      var bkg = chrome.extension.getBackgroundPage();
 
       var tabUrl = tabs[0].url;
 
-      // check to make sure we are on a calendar
+      // check we are on Google Calendar
+      var hostname = (new URL(tabUrl)).hostname;
+      if (hostname != "calendar.google.com") {
+        return;
+      }
+
+      // check to make sure we are viewing the calendar
       if (tabUrl.includes("trash") || 
           tabUrl.includes("settings") || 
           tabUrl.includes("eventedit")) {
         return;
       }
-  
+
       // ----------- get the currently selected date 'currDate' ----------- //
       var urlPieces = tabUrl.split("/");
       var urlDate = [];
@@ -51,13 +46,12 @@ chrome.commands.onCommand.addListener(function(command) {
       var matchedRoot = tabUrl.match(/.*\/r/)[0];
       
       // ----------- Update URL ----------- //
-      // increment date one week
-      if (command == "down-week") {
+      // increment date
+      if (command == "02-down-week") {
         currDate.setDate(currDate.getDate() + 7);
       } else {
         currDate.setDate(currDate.getDate() - 7);
       }
-  
       // set target URL with updated date
       tabUrl = matchedRoot + "/customweek/"
           + currDate.getFullYear() + "/" + (currDate.getMonth() + 1) + "/" + currDate.getDate();
