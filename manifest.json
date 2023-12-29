@@ -1,6 +1,6 @@
 {
   "name": "Week Increment Google Calendar Custom View",
-  "version": "0.2",
+  "version": "0.3",
   "description": "Adds shortcuts to increment the custom week view for Google Calendar one week at a time.",
   "permissions": ["activeTab"],
   "background": {
