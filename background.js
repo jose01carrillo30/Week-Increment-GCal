@@ -17,7 +17,7 @@ function parseCalPath(path) {
   let cursor = rIdx + 1;
 
   // the result this function may return
-  let viewData = {unit:null, count:null, date:null};
+  let viewData = {unit:null, count:null, date:null, basePath: urlPieces.slice(0, rIdx+1).join('/')};
   
   // if nothing else specified, it is today's date but we don't know which view.
   // TODO: consider having this return something distinct from when we are in a known but unusable view (e.g. year)
@@ -87,6 +87,17 @@ function parseCalPath(path) {
   return viewData;
 }
 
+function makeCustomCalPath(viewData) {
+  let calPath = viewData.basePath + "/custom";
+  calPath += "/" + viewData.count;
+  calPath += "/" + (viewData.unit == 'day'? 'd' : 'w');
+  calPath += "/" + viewData.date.getFullYear();
+  calPath += "/" + (viewData.date.getMonth() + 1);
+  calPath += "/" + viewData.date.getDate();
+  console.log("calPath made as: ", calPath);
+  return calPath;
+}
+
 // Listener for increment key command
 chrome.commands.onCommand.addListener(function(command) {
   if (command == "02-down-week" || command == "01-up-week"
@@ -109,7 +120,12 @@ chrome.commands.onCommand.addListener(function(command) {
         return;
       }
 
-      // console.log(parseCalPath(urlObj.pathname));
+      let pathInfo = parseCalPath(urlObj.pathname);
+      console.log(pathInfo);
+      urlObj.pathname = makeCustomCalPath(pathInfo);
+      console.log("as string, ", urlObj.toString());
+      chrome.tabs.update({url: urlObj.toString()});
+      return
 
       // ----------- get the currently selected date 'currDate' ----------- //
       var urlPieces = tabUrl.split("/");
